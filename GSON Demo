@@ -1,0 +1,70 @@
+GsonDemo.jsp
+---------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	import="com.google.gson.*,beans.Person,java.util.*"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	Gson gson = new Gson();
+	Person p = new Person();
+	
+	
+	p.setName("Razz");
+	p.setMobile("9988776655");
+	p.setEmail("razz@gmail.com");
+	
+	String s = gson.toJson(p);
+	
+	out.println(s);
+
+	ArrayList<Person> person = new ArrayList<Person>();
+	person.add(p);
+	person.add(p);
+	
+	String sal = gson.toJson(person);
+	out.println(sal);
+	
+
+%>
+</body>
+</html>
+
+Person.java
+-------------
+package beans;
+
+public class Person {
+	private String name,email,mobile;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	
+
+}
