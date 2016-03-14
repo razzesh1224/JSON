@@ -1,0 +1,93 @@
+JobsJson.jsp
+--------------
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	import="com.google.gson.*, javax.sql.rowset.*, oracle.jdbc.rowset.OracleCachedRowSet, beans.JobsBean, java.util.*"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	try{
+	CachedRowSet ocrs = new OracleCachedRowSet();
+	ocrs.setUrl("jdbc:oracle:thin:@localhost:1521:XE");
+	ocrs.setUsername("hr");
+	ocrs.setPassword("hr");
+	ocrs.setCommand("select job_id,job_title,min_salary,max_salary from jobs");
+	ocrs.execute();
+	JobsBean jobs[] = new JobsBean[50];
+	for(int i = 0;i<50;i++)
+		jobs[i] = new JobsBean();
+	ArrayList<JobsBean> obj = new ArrayList<JobsBean>();
+	int j=0;
+	while(ocrs.next())
+	{
+		jobs[j].setJob_id(ocrs.getString(1));
+		jobs[j].setJob_title(ocrs.getString(2));
+		jobs[j].setMin_salary(ocrs.getString(3));
+		jobs[j].setMax_salary(ocrs.getString(4));
+		//out.println(jobs[j].getJob_id() + "\t" + jobs[j].getJob_title() + "\t" + jobs[j].getMin_salary() + "\t" + jobs[j].getMax_salary() + "<br/>");
+		obj.add(jobs[j]);
+		
+		j++;
+	}
+	
+	Gson gson = new Gson();
+	
+	
+	String jobs_json = gson.toJson(obj); 
+	out.println("The jobs Json :" + jobs_json);
+	}
+	catch(Exception e)
+	{
+		out.println(e);	
+	}
+
+%>
+</body>
+</html>
+
+
+JobsBean.java
+--------------
+package beans;
+
+public class JobsBean {
+	private String job_id,job_title,min_salary,max_salary;
+
+	public String getJob_id() {
+		return job_id;
+	}
+
+	public void setJob_id(String job_id) {
+		this.job_id = job_id;
+	}
+
+	public String getJob_title() {
+		return job_title;
+	}
+
+	public void setJob_title(String job_title) {
+		this.job_title = job_title;
+	}
+
+	public String getMin_salary() {
+		return min_salary;
+	}
+
+	public void setMin_salary(String min_salary) {
+		this.min_salary = min_salary;
+	}
+
+	public String getMax_salary() {
+		return max_salary;
+	}
+
+	public void setMax_salary(String max_salary) {
+		this.max_salary = max_salary;
+	}
+	
+}
